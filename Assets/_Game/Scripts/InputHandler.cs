@@ -8,20 +8,19 @@ namespace _Game.Scripts
         public float horizontal;
         public float vertical;
         public float moveAmount;
+
         public float mouseX;
         public float mouseY;
 
         private PlayerControls _inputActions;
         private PlayerLocomotion _playerLocomotion;
-        private Animator _animator;
 
         private Vector2 _movementInput;
         private Vector2 _cameraInput;
-
+        private bool _rollInput;
         private bool _jumpInput;
-        
-        private static readonly int Vertical = Animator.StringToHash("Vertical");
-        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+
+        public bool rollFlag;
 
         public void OnEnable()
         {
@@ -34,6 +33,9 @@ namespace _Game.Scripts
 
                 _inputActions.PlayerMovement.Jump.performed += i => _jumpInput = true; // set true when pressed 
                 _inputActions.PlayerMovement.Jump.canceled += i => _jumpInput = false;
+
+                _inputActions.PlayerActions.Roll.performed += i => _rollInput = false;
+                _inputActions.PlayerActions.Roll.canceled += i => _rollInput = true;
             }
 
             _inputActions.Enable();
@@ -42,50 +44,55 @@ namespace _Game.Scripts
         public void Awake()
         {
             _playerLocomotion = GetComponent<PlayerLocomotion>();
-            _animator = GetComponent<Animator>();
         }
 
         public void Update()
         {
-            HandleAllInputs();
+            //  HandleAllInputs();
         }
 
-        public void HandleAllInputs()
-        {
-            HandleMovementInput();
-            // HandleSprintingInput();
-            HandleJumpingInput();
-            // HandleSlideInput();
+        // public void HandleAllInputs()
+        //{
+        // HandleMovementInput();
+        //   HandleJumpingInput();
+        // HandleSlideInput();
 
-            //HandleAttackInput();
-            //HandleDefenseInput();
-            //HandleCrouchInput();
+        // HandleSprintingInput();
+        //HandleAttackInput();
+        //HandleDefenseInput();
+        //HandleCrouchInput();
 
-            //HandleActionInput(); 
-        }
-
+        //HandleActionInput(); 
+        // }
 
         public void OnDisable()
         {
             _inputActions.Disable();
         }
 
+        public void TickInput(float delta)
+        {
+            MoveInput(delta);
+            HandleRollInput(delta);
+        }
 
-        private void HandleMovementInput()
+        private void MoveInput(float delta)
         {
             horizontal = _movementInput.x;
             vertical = _movementInput.y;
-
-            Debug.Log(_movementInput);
-
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+
             mouseX = _cameraInput.x;
             mouseY = _cameraInput.y;
-            _playerLocomotion.HandleMovement();
-            //animatorManager.UpdateAnimatorValues(horizontalInput, moveAmount, playerLocomotion.isSprinting);
+            // _playerLocomotion.HandleMovement();
+        }
 
-            _animator.SetFloat(Vertical, vertical, .1f, Time.deltaTime);
-            _animator.SetFloat(Horizontal, horizontal, .1f, Time.deltaTime);
+        private void HandleRollInput(float delta)
+        {
+            if (_rollInput)
+            {
+                rollFlag = true;
+            }
         }
 
         private void HandleJumpingInput()
