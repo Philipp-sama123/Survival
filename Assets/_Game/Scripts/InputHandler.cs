@@ -5,8 +5,8 @@ namespace _Game.Scripts
 {
     public class InputHandler : MonoBehaviour
     {
-        public float horizontal;
-        public float vertical;
+        public float horizontalMovementInput;
+        public float verticalMovementInput;
         public float moveAmount;
 
         public float mouseX;
@@ -21,6 +21,7 @@ namespace _Game.Scripts
         private bool _jumpInput;
 
         public bool rollFlag;
+        public bool isInteracting;
 
         public void OnEnable()
         {
@@ -73,23 +74,23 @@ namespace _Game.Scripts
         public void TickInput(float delta)
         {
             MoveInput(delta);
-            HandleRollInput(delta);
+            HandleDodgeInput(delta);
         }
 
         private void MoveInput(float delta)
         {
-            horizontal = _movementInput.x;
-            vertical = _movementInput.y;
-            moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+            horizontalMovementInput = _movementInput.x;
+            verticalMovementInput = _movementInput.y;
+            moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalMovementInput) + Mathf.Abs(verticalMovementInput));
 
             mouseX = _cameraInput.x;
             mouseY = _cameraInput.y;
             // _playerLocomotion.HandleMovement();
         }
 
-        private void HandleRollInput(float delta)
+        private void HandleDodgeInput(float delta)
         {
-            if (_rollInput)
+            if (_rollInput && !isInteracting)
             {
                 rollFlag = true;
             }

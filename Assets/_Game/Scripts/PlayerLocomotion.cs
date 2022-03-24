@@ -10,7 +10,7 @@ namespace _Game.Scripts
         private InputHandler _inputHandler;
         private AnimatorHandler _animatorHandler;
         private Transform _mainCameraTransform;
-        private new Rigidbody _rigidbody;
+        public new Rigidbody rigidbody;
 
         [HideInInspector] public Transform myTransform;
 
@@ -30,15 +30,14 @@ namespace _Game.Scripts
         private Vector3 _normalVector;
         private Vector3 _targetPosition;
 
-        private static int IsInteracting;
+        private static readonly int IsInteracting = Animator.StringToHash("IsInteracting");
 
         private void Start()
         {
             _inputHandler = GetComponent<InputHandler>();
             _characterController = GetComponent<CharacterController>(); // Todo: replace with Rigidbody
             _animatorHandler = GetComponentInChildren<AnimatorHandler>();
-            _rigidbody = GetComponent<Rigidbody>();
-            IsInteracting = Animator.StringToHash("IsInteracting");
+            rigidbody = GetComponent<Rigidbody>();
 
             _animatorHandler.Initialize();
 
@@ -64,15 +63,15 @@ namespace _Game.Scripts
 
         private void HandleMovement(float delta)
         {
-            _moveDirection = _mainCameraTransform.forward * _inputHandler.vertical;
-            _moveDirection += _mainCameraTransform.right * _inputHandler.horizontal;
+            _moveDirection = _mainCameraTransform.forward * _inputHandler.verticalMovementInput;
+            _moveDirection += _mainCameraTransform.right * _inputHandler.horizontalMovementInput;
             _moveDirection.Normalize();
             _moveDirection.y = 0;
             float speed = movementSpeed;
             _moveDirection *= speed;
 
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(_moveDirection, _normalVector);
-            _rigidbody.velocity = projectedVelocity;
+            rigidbody.velocity = projectedVelocity;
             _inputHandler.TickInput(delta);
 
             if (_animatorHandler.canRotate)
@@ -80,14 +79,21 @@ namespace _Game.Scripts
                 HandleRotation(delta);
             }
 
-            _animatorHandler.UpdateAnimatorValues(_inputHandler.vertical, _inputHandler.horizontal);
+            // Todo: fixes rotation issue
+            //  if (_inputHandler.verticalMovementInput < .1 && _inputHandler.verticalMovementInput > -0.1)
+            //     _animatorHandler.UpdateAnimatorValues(_inputHandler.moveAmount, 0);
+            //else
+            _animatorHandler.UpdateAnimatorValues(
+                _inputHandler.moveAmount,
+                _inputHandler.horizontalMovementInput
+            );
         }
 
         private void HandleRotation(float delta)
         {
             float moveOverride = _inputHandler.moveAmount;
-            Vector3 targetDirection = _mainCameraTransform.forward * _inputHandler.vertical;
-            targetDirection += _mainCameraTransform.right * _inputHandler.horizontal;
+            Vector3 targetDirection = _mainCameraTransform.forward * _inputHandler.verticalMovementInput;
+            targetDirection += _mainCameraTransform.right * _inputHandler.horizontalMovementInput;
 
             targetDirection.Normalize();
             targetDirection.y = 0;
@@ -97,7 +103,10 @@ namespace _Game.Scripts
             Quaternion tr = Quaternion.LookRotation(targetDirection);
             Quaternion targetRotation = Quaternion.Slerp(myTransform.rotation, tr, rs * delta);
 
-            myTransform.rotation = targetRotation;
+            // Todo: handle properly? Animation --> 90 degree left or right 
+            //myTransform.rotation = targetRotation;
+            rigidbody.MoveRotation(targetRotation);
+            //_rigidbody.AddTorque(targetRotation.eulerAngles);
         }
 
         private void HandleRollingAndSprinting(float delta)
@@ -105,10 +114,10 @@ namespace _Game.Scripts
             if (_animatorHandler.animator.GetBool(IsInteracting)) return;
             if (_inputHandler.rollFlag)
             {
-                _moveDirection = _mainCameraTransform.forward * _inputHandler.vertical;
-                _moveDirection += _mainCameraTransform.right * _inputHandler.horizontal;
+                _moveDirection = _mainCameraTransform.forward * _inputHandler.verticalMovementInput;
+                _moveDirection += _mainCameraTransform.right * _inputHandler.horizontalMovementInput;
 
-                if (_inputHandler.vertical > 0)
+                if (_inputHandler.verticalMovementInput > 0)
                 {
                     _animatorHandler.PlayTargetAnimation("DodgeForward", true);
                     _moveDirection.y = 0;

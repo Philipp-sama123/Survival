@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _Game.Scripts
@@ -5,6 +6,8 @@ namespace _Game.Scripts
     public class AnimatorHandler : MonoBehaviour
     {
         public Animator animator;
+        private InputHandler _inputHandler;
+        private PlayerLocomotion _playerLocomotion;
         public bool canRotate;
 
         private static int Vertical;
@@ -15,6 +18,9 @@ namespace _Game.Scripts
         public void Initialize()
         {
             animator = GetComponent<Animator>();
+            _inputHandler = GetComponentInParent<InputHandler>();
+            _playerLocomotion = GetComponentInParent<PlayerLocomotion>();
+
             Vertical = Animator.StringToHash("Vertical");
             Horizontal = Animator.StringToHash("Horizontal");
             IsInteracting = Animator.StringToHash("IsInteracting");
@@ -82,8 +88,21 @@ namespace _Game.Scripts
         public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
         {
             animator.applyRootMotion = isInteracting;
-            animator.SetBool(IsInteracting, isInteracting);
+            animator.SetBool("IsInteracting", isInteracting);
             animator.CrossFade(targetAnimation, 0.2f);
+        }
+
+        private void OnAnimatorMove()
+        {
+            if (_inputHandler.isInteracting == false)
+                return;
+
+            float delta = Time.deltaTime;
+            _playerLocomotion.rigidbody.drag = 0;
+            Vector3 deltaPosition = animator.deltaPosition;
+            deltaPosition.y = 0;
+            Vector3 velocity = deltaPosition / delta;
+            _playerLocomotion.rigidbody.velocity = velocity;
         }
 
         public void ActivateRotation()
