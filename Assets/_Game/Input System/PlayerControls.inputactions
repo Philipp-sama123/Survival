@@ -125,7 +125,7 @@
                     "id": "b8729a27-d72a-4e91-ac9b-fd41fb2cf792",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "NormalizeVector2",
+                    "processors": "",
                     "groups": "",
                     "action": "Camera",
                     "isComposite": false,

@@ -3,23 +3,26 @@ using UnityEngine;
 
 namespace _Game.Scripts
 {
-    [RequireComponent(typeof(InputHandler))]
+    [RequireComponent(typeof(InputManager))]
     public class PlayerManager : MonoBehaviour
     {
-        private InputHandler _inputHandler;
-        private Animator _animator;
-        private static readonly int IsInteracting = Animator.StringToHash("IsInteracting");
+        private InputManager _inputManager;
+        private PlayerLocomotionManager _playerLocomotionManager;
 
-        private void Start()
+        private void Awake()
         {
-            _inputHandler = GetComponent<InputHandler>();
-            _animator = GetComponent<Animator>();
+            _inputManager = GetComponent<InputManager>();
+            _playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         }
 
         private void Update()
         {
-            _inputHandler.isInteracting = _animator.GetBool(IsInteracting);
-            _inputHandler.rollFlag = false;
+            _inputManager.HandleAllInputs();
+        }
+
+        private void FixedUpdate()
+        {
+            _playerLocomotionManager.HandleRotation();
         }
     }
 }
