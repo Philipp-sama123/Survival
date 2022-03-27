@@ -160,7 +160,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400028, guid: 37c6cfe59f56e8a4799011397a870a8b, type: 3}
+  m_Motion: {fileID: 7400024, guid: 37c6cfe59f56e8a4799011397a870a8b, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -449,6 +449,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: IsPerformingQuickTurn
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -488,6 +494,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPerformingAction: IsPerformingAction
   isPerformingActionStatus: 0
+  isPerformingQuickTurn: IsPerformingQuickTurn
+  isPerformingQuickTurnStatus: 0
 --- !u!1107 &719343783136379241
 AnimatorStateMachine:
   serializedVersion: 6
@@ -502,7 +510,7 @@ AnimatorStateMachine:
     m_Position: {x: 460, y: 410, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5154159711229697862}
-    m_Position: {x: 543.243, y: 153.79518, z: 0}
+    m_Position: {x: 540, y: 150, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
