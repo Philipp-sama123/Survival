@@ -5,56 +5,49 @@ namespace _Game.Scripts
 {
     public class AnimatorManager : MonoBehaviour
     {
+        private PlayerLocomotionManager _playerLocomotionManager;
         private Animator _animator;
-        private InputManager _inputManager;
-        public bool canRotate;
 
-        private static int IsInteracting;
-
-        /**
-         * Animator values
-         */
-        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+        private float _snappedHorizontal;
+        private float _snappedVertical;
 
         private static readonly int Vertical = Animator.StringToHash("Vertical");
-        private static readonly int Interacting = Animator.StringToHash("IsInteracting");
+        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+        private static readonly int IsPerformingAction = Animator.StringToHash("IsPerformingAction");
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            _inputManager = GetComponent<InputManager>();
+            _playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         }
 
         public void HandleAnimatorValues(float horizontalMovement, float verticalMovement, bool isSprinting)
         {
-            float snappedHorizontal;
-            float snappedVertical;
-
             #region SnappedHorizontal
 
             if (horizontalMovement > -0.25f && horizontalMovement < 0.25f)
             {
-                snappedHorizontal = 0;
+                _snappedHorizontal = 0;
             }
             else if (horizontalMovement > 0.25f && horizontalMovement < 0.75f)
             {
-                snappedHorizontal = 0.5f;
+                _snappedHorizontal = 0.5f;
             }
             else if (horizontalMovement > 0.75f)
             {
-                snappedHorizontal = 1;
+                _snappedHorizontal = 1;
             }
             else if (horizontalMovement < -0.25 && horizontalMovement > -0.75f)
             {
-                snappedHorizontal = -0.5f;
+                _snappedHorizontal = -0.5f;
             }
             else if (horizontalMovement < -0.75f)
             {
-                snappedHorizontal = -1;
+                _snappedHorizontal = -1;
             }
             else
             {
-                snappedHorizontal = 0;
+                _snappedHorizontal = 0;
             }
 
             #endregion
@@ -63,45 +56,58 @@ namespace _Game.Scripts
 
             if (verticalMovement > -0.25f && verticalMovement < 0.25f)
             {
-                snappedVertical = 0;
+                _snappedVertical = 0;
             }
             else if (verticalMovement > 0.25f && verticalMovement < 0.75f)
             {
-                snappedVertical = 0.5f;
+                _snappedVertical = 0.5f;
             }
             else if (verticalMovement > 0.75f)
             {
-                snappedVertical = 1;
+                _snappedVertical = 1;
             }
             else if (verticalMovement < -0.25 && verticalMovement > -0.75f)
             {
-                snappedVertical = -0.5f;
+                _snappedVertical = -0.5f;
             }
             else if (verticalMovement < -0.75f)
             {
-                snappedVertical = -1;
+                _snappedVertical = -1;
             }
             else
             {
-                snappedVertical = 0;
+                _snappedVertical = 0;
             }
 
             #endregion
 
             if (isSprinting)
             {
-                snappedVertical *= 2;
+                _snappedVertical *= 2;
             }
 
-            _animator.SetFloat(Horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
-            _animator.SetFloat(Vertical, snappedVertical, 0.1f, Time.deltaTime);
+            _animator.SetFloat(Horizontal, _snappedHorizontal, 0.1f, Time.deltaTime);
+            _animator.SetFloat(Vertical, _snappedVertical, 0.1f, Time.deltaTime);
         }
 
-        public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
+        public void PlayAnimationWithoutRootMotion(string targetAnimation, bool isPerformingAction)
         {
-            _animator.applyRootMotion = isInteracting;
-            _animator.SetBool(Interacting, isInteracting);
+            _animator.SetBool(IsPerformingAction, isPerformingAction);
+            _animator.applyRootMotion = false;
+            
             _animator.CrossFade(targetAnimation, 0.2f);
+        }
+
+        private void OnAnimatorMove()
+        {
+            Vector3 animatorDeltaPosition = _animator.deltaPosition;
+            animatorDeltaPosition.y = 0; // prevents going up
+
+            Vector3 velocity = animatorDeltaPosition / Time.deltaTime;
+
+            _playerLocomotionManager.playerRigidbody.drag = 0;
+            _playerLocomotionManager.playerRigidbody.velocity = velocity;
+            transform.rotation *= _animator.deltaRotation;
         }
     }
 }
