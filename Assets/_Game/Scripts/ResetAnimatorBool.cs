@@ -13,6 +13,7 @@ namespace _Game.Scripts
         {
             animator.SetBool(isPerformingAction, isPerformingActionStatus);
             animator.SetBool(isPerformingQuickTurn, isPerformingQuickTurnStatus);
+            Debug.Log( animator.GetBool(isPerformingQuickTurn));
         }
     }
 }

@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Dodge",
+                    "type": "Button",
+                    "id": "5311517a-9fda-4f75-8969-a5ada19ff667",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "QuickTurn",
                     "type": "Button",
                     "id": "b3f14c5e-c874-46c8-bdde-c7de65543b5f",
@@ -186,6 +195,28 @@
                 },
                 {
                     "name": "",
+                    "id": "b541aaf0-2eb6-48db-a373-25459765b075",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3f68f8c-d664-4a98-bc48-451568f3ef6e",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "bdf4aa8f-209d-4dcc-9d82-4593593c2c96",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -198,7 +229,7 @@
                 {
                     "name": "",
                     "id": "998bbefc-9ad5-4a9b-b36e-86f4b09e0a3c",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/dpad/left",
                     "interactions": "MultiTap",
                     "processors": "",
                     "groups": "",

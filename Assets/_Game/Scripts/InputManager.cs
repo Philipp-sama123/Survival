@@ -22,6 +22,7 @@ namespace _Game.Scripts
         [Header("Button Input")] public bool sprintInput;
         public bool jumpInput;
         public bool quickTurnInput;
+        public bool dodgeInput;
         private static readonly int IsPerformingQuickTurn = Animator.StringToHash("IsPerformingQuickTurn");
 
         private void Awake()
@@ -43,8 +44,9 @@ namespace _Game.Scripts
                 _inputActions.PlayerMovement.Sprint.performed += i => sprintInput = true;
                 _inputActions.PlayerMovement.Sprint.canceled += i => sprintInput = false;
 
-                _inputActions.PlayerMovement.Jump.performed += i => jumpInput = true;
                 _inputActions.PlayerMovement.QuickTurn.performed += i => quickTurnInput = true;
+                _inputActions.PlayerMovement.Jump.performed += i => jumpInput = true;
+                _inputActions.PlayerMovement.Dodge.performed += i => dodgeInput = true;
             }
 
             _inputActions.Enable();
@@ -61,6 +63,8 @@ namespace _Game.Scripts
             HandleCameraInput();
 
             HandleQuickTurnInput();
+            HandleDodgeInput();
+
             HandleJumpInput();
             // HandleSprintingInput();
             // HandleSlideInput();
@@ -70,15 +74,6 @@ namespace _Game.Scripts
             //HandleCrouchInput();
 
             //HandleActionInput(); 
-        }
-
-        private void HandleJumpInput()
-        {
-            if (_playerManager.isPerformingAction) return;
-            if (!jumpInput) return;
-
-            jumpInput = false;
-            _animatorManager.PlayAnimationWithoutRootMotion("Jump", true);
         }
 
         private void HandleMovementInput()
@@ -95,14 +90,48 @@ namespace _Game.Scripts
             verticalCameraInput = _cameraInput.y;
         }
 
+        private void HandleJumpInput()
+        {
+            if (_playerManager.isPerformingAction) return;
+            if (!jumpInput) return;
+
+            jumpInput = false;
+
+            _animatorManager.PlayAnimationWithoutRootMotion(
+                verticalMovementInput < 0.25f
+                    ? "Jump"
+                    : "Jump Move",
+                true);
+        }
+
         private void HandleQuickTurnInput()
         {
             if (_playerManager.isPerformingAction) return;
             if (!quickTurnInput) return;
 
             quickTurnInput = false;
+
             _animator.SetBool(IsPerformingQuickTurn, true);
-            _animatorManager.PlayAnimationWithoutRootMotion("Quick Turn", true);
+
+            _animatorManager.PlayAnimationWithoutRootMotion(
+                horizontalCameraInput < 0.25f
+                    ? "Quick Turn Left"
+                    : "Quick Turn Right",
+                true);
+        }
+
+        private void HandleDodgeInput()
+        {
+            if (_playerManager.isPerformingAction) return;
+            if (!dodgeInput) return;
+
+            dodgeInput = false;
+
+            _animatorManager.PlayAnimationWithoutRootMotion(
+                verticalMovementInput < 0
+                    ? "Dodge Backward"
+                    : "Dodge Forward",
+                true);
         }
     }
 }
