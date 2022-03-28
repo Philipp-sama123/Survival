@@ -8,12 +8,14 @@ namespace _Game.Scripts
         public bool isPerformingActionStatus = false;
         [Header("Is Performing Action Bool")] public string isPerformingQuickTurn = "IsPerformingQuickTurn";
         public bool isPerformingQuickTurnStatus = false;
+        [Header("Is Jumping Action Bool")] public string isJumping = "IsJumping";
+        public bool isJumpingStatus = false;
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool(isPerformingAction, isPerformingActionStatus);
             animator.SetBool(isPerformingQuickTurn, isPerformingQuickTurnStatus);
-            Debug.Log( animator.GetBool(isPerformingQuickTurn));
+            animator.SetBool(isJumping, isJumpingStatus);
         }
     }
 }

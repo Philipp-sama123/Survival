@@ -24,6 +24,7 @@ namespace _Game.Scripts
         public bool quickTurnInput;
         public bool dodgeInput;
         private static readonly int IsPerformingQuickTurn = Animator.StringToHash("IsPerformingQuickTurn");
+        private static readonly int IsJumping = Animator.StringToHash("IsJumping");
 
         private void Awake()
         {
@@ -97,6 +98,8 @@ namespace _Game.Scripts
 
             jumpInput = false;
 
+            _animator.SetBool(IsJumping, true);
+            
             _animatorManager.PlayAnimationWithoutRootMotion(
                 verticalMovementInput < 0.25f
                     ? "Jump"

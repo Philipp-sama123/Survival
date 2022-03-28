@@ -19,8 +19,8 @@ namespace _Game.Scripts
 
         [Header("Rotation Variables")] private Quaternion _targetRotation;
 
-        [Header("Jumping Variables")] private float _gravityIntensity = 2f;
-        private float _jumpHeight = 10f;
+        [Header("Jumping Variables")] private float _gravityIntensity = -9.61f;
+        private float _jumpHeight = 7.5f;
 
         private Quaternion _playerRotation;
 
@@ -37,17 +37,14 @@ namespace _Game.Scripts
 
         public void HandleJumping()
         {
-            // if (_inputManager.GetJump())
-            // {
-            //     .animator.SetBool("IsJumping", true);
-            // _animatorManager.PlayTargetAnimation("Jump", false);
-            // float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
-            // Vector3 playerVelocity = moveDirection;
-
-            // _rigidbody.AddForce(new Vector3(0, 10f, 0));
-            // TODO:  juuuuump
-            ;
-            // }
+            if (_playerManager.isJumping)
+            {
+                // Vector3 targetPosition = transform.position;
+                // float jumpingVelocity = Mathf.Sqrt(-2 * _gravityIntensity * _jumpHeight);
+                // targetPosition += Vector3.up * jumpingVelocity;
+                // transform.position = targetPosition;
+                playerRigidbody.AddForce(Vector3.up * _jumpHeight, ForceMode.Acceleration);
+            }
         }
 
         public void HandleRotation()

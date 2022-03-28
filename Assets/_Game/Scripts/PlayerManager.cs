@@ -11,10 +11,14 @@ namespace _Game.Scripts
         private Animator _animator;
 
         [Header("Player Flags")] public bool isPerformingAction;
+
         public bool isPerformingQuickTurn;
+        public bool isJumping;
 
         private static readonly int IsPerformingAction = Animator.StringToHash("IsPerformingAction");
+
         private static readonly int IsPerformingQuickTurn = Animator.StringToHash("IsPerformingQuickTurn");
+        private static readonly int IsJumping = Animator.StringToHash("IsJumping");
 
         private void Awake()
         {
@@ -28,6 +32,7 @@ namespace _Game.Scripts
             _inputManager.HandleAllInputs();
             isPerformingAction = _animator.GetBool(IsPerformingAction);
             isPerformingQuickTurn = _animator.GetBool(IsPerformingQuickTurn);
+            isJumping = _animator.GetBool(IsJumping);
         }
 
         private void FixedUpdate()
