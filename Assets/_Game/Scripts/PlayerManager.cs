@@ -38,7 +38,7 @@ namespace _Game.Scripts
         private void FixedUpdate()
         {
             _playerLocomotionManager.HandleRotation();
-            _playerLocomotionManager.HandleJumping();
+            _playerLocomotionManager.HandleFallingAndLanding();
         }
     }
 }
