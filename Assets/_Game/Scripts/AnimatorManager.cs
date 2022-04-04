@@ -6,7 +6,8 @@ namespace _Game.Scripts
     public class AnimatorManager : MonoBehaviour
     {
         private PlayerLocomotionManager _playerLocomotionManager;
-        private Animator _animator;
+        private PlayerManager _playerManager;
+        public Animator animator;
 
         private float _snappedHorizontal;
         private float _snappedVertical;
@@ -14,10 +15,12 @@ namespace _Game.Scripts
         private static readonly int Vertical = Animator.StringToHash("Vertical");
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
         private static readonly int IsPerformingAction = Animator.StringToHash("IsPerformingAction");
+        private static readonly int IsUsingRootMotion = Animator.StringToHash("IsUsingRootMotion");
 
         private void Awake()
         {
-            _animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
+            _playerManager = GetComponent<PlayerManager>();
             _playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         }
 
@@ -86,28 +89,30 @@ namespace _Game.Scripts
                 _snappedVertical *= 2;
             }
 
-            _animator.SetFloat(Horizontal, _snappedHorizontal, 0.1f, Time.deltaTime);
-            _animator.SetFloat(Vertical, _snappedVertical, 0.1f, Time.deltaTime);
+            animator.SetFloat(Horizontal, _snappedHorizontal, 0.1f, Time.deltaTime);
+            animator.SetFloat(Vertical, _snappedVertical, 0.1f, Time.deltaTime);
         }
-
+        
         public void PlayAnimationWithoutRootMotion(string targetAnimation, bool isPerformingAction)
         {
-            _animator.SetBool(IsPerformingAction, isPerformingAction);
-            _animator.applyRootMotion = false;
-            
-            _animator.CrossFade(targetAnimation, 0.2f);
+            animator.SetBool(IsPerformingAction, isPerformingAction);
+            animator.applyRootMotion = false;
+
+            animator.CrossFade(targetAnimation, 0.2f);
         }
 
         private void OnAnimatorMove()
         {
-            Vector3 animatorDeltaPosition = _animator.deltaPosition;
+            
+          // if (!_playerManager.isUsingRootMotion) return;
+            Vector3 animatorDeltaPosition = animator.deltaPosition;
             animatorDeltaPosition.y = 0; // prevents going up
 
             Vector3 velocity = animatorDeltaPosition / Time.deltaTime;
 
             _playerLocomotionManager.playerRigidbody.drag = 0;
             _playerLocomotionManager.playerRigidbody.velocity = velocity;
-            transform.rotation *= _animator.deltaRotation;
+            transform.rotation *= animator.deltaRotation;
         }
     }
 }

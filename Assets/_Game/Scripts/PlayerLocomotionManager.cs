@@ -14,24 +14,35 @@ namespace _Game.Scripts
         [Header("Player Rigidbody")] public Rigidbody playerRigidbody;
 
         // Rotation Variables
-        [Header("Movement Speed")] [SerializeField]
+        [Header("Movement Variables")] [SerializeField]
         private float rotationSpeed = 7.5f;
 
+        [SerializeField] private float runningSpeed = 5f;
+        [SerializeField] private float sprintingSpeed = 7f;
+        [SerializeField] private float crouchingSpeedReducer = 5f;
+        [SerializeField] private float walkingSpeed = 1.5f;
+
         [SerializeField] private float quickTurnSpeed = 12.5f;
+        [SerializeField] private float gravityIntensity = -15f;
+        [SerializeField] private float jumpHeight = 5f;
+
+        private Vector3 _moveDirection;
         private Quaternion _targetRotation;
         private Quaternion _playerRotation;
 
-        // Falling and Jumping
-        private float _gravityIntensity = -15f;
-        private float _jumpHeight = 5f;
+        // Movement flags
         private bool _isGrounded = true;
         private bool _isJumping = false;
+        private bool _isCrouching;
+        private bool _isSprinting;
+        private float _inAirTimer;
 
-        [Header("Falling")] [SerializeField] private float inAirTimer;
-        [SerializeField] private float leapingVelocity = 3f;
-        [SerializeField] private float fallingVelocity = 33f;
-        [SerializeField] private float rayCastHeightOffset = 0.5f;
+        [Header("Falling")] [SerializeField] private float leapingVelocity = 10f;
+        [SerializeField] private float fallingVelocity = 200f;
+        [SerializeField] private float rayCastHeightOffset = 0.25f;
         [SerializeField] private LayerMask groundLayer;
+        private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
+        private static readonly int IsJumping = Animator.StringToHash("IsJumping");
 
         private void Awake()
         {
@@ -44,27 +55,64 @@ namespace _Game.Scripts
             _mainCameraTransform = Camera.main.transform;
         }
 
+        private void HandleMovement()
+        {
+            _moveDirection = _mainCameraTransform.forward * _inputManager.verticalMovementInput;
+            _moveDirection += _mainCameraTransform.right * _inputManager.horizontalMovementInput;
+
+            _moveDirection.Normalize();
+            _moveDirection.y = 0; // prevent going up
+
+
+            // if (_isSprinting)
+            // {
+            //     _moveDirection *= sprintingSpeed;
+            // }
+            // else
+            // {
+            //     if (_inputManager.verticalMovementInput >= 0.5f)
+            //     {
+            //         _moveDirection *= runningSpeed;
+            //     }
+            //     else
+            //     {
+            //         _moveDirection *= walkingSpeed;
+            //     }
+            // }
+            //
+            // if (_isCrouching)
+            // {
+            //     _moveDirection /= crouchingSpeedReducer;
+            // }
+            //
+            // Vector3 movementVelocity = _moveDirection;
+            // playerRigidbody.velocity = movementVelocity;
+        }
+
         public void HandleJumping()
         {
             if (_isGrounded)
             {
                 // _animatorManager.animator.SetBool("IsJumping", true);
-                _animatorManager.PlayAnimationWithoutRootMotion("Jump", true);
 
-                float jumpingVelocity = Mathf.Sqrt(-2 * _gravityIntensity * _jumpHeight);
-                Vector3 moveDirection = _mainCameraTransform.forward * _inputManager.verticalMovementInput;
+                _animatorManager.PlayAnimationWithoutRootMotion(
+                    _inputManager.verticalMovementInput < 0.25f
+                        ? "Jump"
+                        : "Jump Move",
+                    false);
 
-                moveDirection += _mainCameraTransform.right * _inputManager.horizontalMovementInput;
-                moveDirection.Normalize();
-                moveDirection.y = 0; // prevent going up
-                Vector3 playerVelocity = moveDirection;
+                _animatorManager.animator.SetBool(IsJumping, true);
+                _animatorManager.PlayAnimationWithoutRootMotion("Jump", false);
+                float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+                Vector3 playerVelocity = _moveDirection;
 
                 playerVelocity.y = jumpingVelocity; // adds jumping velocity to movement
                 playerRigidbody.velocity = playerVelocity;
+                // playerRigidbody.AddForce(Vector3.up * jumpingVelocity, ForceMode.Acceleration);
             }
         }
 
-        public void HandleRotation()
+        private void HandleRotation()
         {
             _targetRotation = Quaternion.Euler(0, _mainCameraTransform.eulerAngles.y, 0);
             _playerRotation =
@@ -93,7 +141,7 @@ namespace _Game.Scripts
             }
         }
 
-        public void HandleFallingAndLanding()
+        private void HandleFallingAndLanding()
         {
             RaycastHit hit;
             Vector3 raycastOrigin = transform.position;
@@ -107,9 +155,10 @@ namespace _Game.Scripts
                     _animatorManager.PlayAnimationWithoutRootMotion("Falling", true);
                 }
 
-                inAirTimer += Time.deltaTime;
-                playerRigidbody.AddForce(transform.forward * leapingVelocity); // step of the ledge
-                playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
+                _inAirTimer += Time.deltaTime;
+                playerRigidbody.AddForce(transform.forward * leapingVelocity);
+                playerRigidbody.AddForce(-Vector3.up * fallingVelocity * _inAirTimer, ForceMode.Acceleration);
+                Debug.LogWarning(-Vector3.up * _inAirTimer * fallingVelocity);
                 //  -Vector3.up     --      means it pulls you downwards 
                 //  * inAirTimer    --      the longer you are in the air the quicker you fall
             }
@@ -125,7 +174,7 @@ namespace _Game.Scripts
                 targetPosition.y =
                     raycastHitPoint.y; // assign the point where the raycast hits the ground to target position
 
-                inAirTimer = 0;
+                _inAirTimer = 0;
                 _isGrounded = true;
             }
             else
@@ -133,6 +182,7 @@ namespace _Game.Scripts
                 _isGrounded = false;
             }
 
+            _animatorManager.animator.SetBool(IsGrounded, _isGrounded);
             // this is responsible for setting the feet over the ground when the player is grounded
             if (_isGrounded && !_isJumping)
             {
@@ -145,6 +195,13 @@ namespace _Game.Scripts
                     transform.position = targetPosition;
                 }
             }
+        }
+
+        public void HandleAllMovements()
+        {
+            HandleMovement();
+            HandleRotation();
+            HandleFallingAndLanding();
         }
     }
 }

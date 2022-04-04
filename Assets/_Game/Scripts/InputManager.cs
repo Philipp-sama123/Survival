@@ -8,6 +8,7 @@ namespace _Game.Scripts
         private PlayerControls _inputActions;
         private PlayerManager _playerManager;
         private AnimatorManager _animatorManager;
+        private PlayerLocomotionManager _playerLocomotionManager;
         private Animator _animator;
 
         [Header("Player Movement")] public float horizontalMovementInput;
@@ -28,9 +29,10 @@ namespace _Game.Scripts
 
         private void Awake()
         {
+            _playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
             _animatorManager = GetComponent<AnimatorManager>();
-            _animator = GetComponent<Animator>();
             _playerManager = GetComponent<PlayerManager>();
+            _animator = GetComponent<Animator>();
         }
 
         public void OnEnable()
@@ -97,14 +99,8 @@ namespace _Game.Scripts
             if (!jumpInput) return;
 
             jumpInput = false;
-
+            _playerLocomotionManager.HandleJumping();
             _animator.SetBool(IsJumping, true);
-            
-            _animatorManager.PlayAnimationWithoutRootMotion(
-                verticalMovementInput < 0.25f
-                    ? "Jump"
-                    : "Jump Move",
-                true);
         }
 
         private void HandleQuickTurnInput()

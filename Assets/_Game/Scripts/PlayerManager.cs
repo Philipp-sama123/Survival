@@ -14,11 +14,12 @@ namespace _Game.Scripts
 
         public bool isPerformingQuickTurn;
         public bool isJumping;
+        public bool isUsingRootMotion;
 
         private static readonly int IsPerformingAction = Animator.StringToHash("IsPerformingAction");
-
         private static readonly int IsPerformingQuickTurn = Animator.StringToHash("IsPerformingQuickTurn");
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
+        private static readonly int IsUsingRootMotion = Animator.StringToHash("IsUsingRootMotion");
 
         private void Awake()
         {
@@ -30,15 +31,19 @@ namespace _Game.Scripts
         private void Update()
         {
             _inputManager.HandleAllInputs();
-            isPerformingAction = _animator.GetBool(IsPerformingAction);
-            isPerformingQuickTurn = _animator.GetBool(IsPerformingQuickTurn);
-            isJumping = _animator.GetBool(IsJumping);
         }
 
         private void FixedUpdate()
         {
-            _playerLocomotionManager.HandleRotation();
-            _playerLocomotionManager.HandleFallingAndLanding();
+            _playerLocomotionManager.HandleAllMovements();
+        }
+
+        private void LateUpdate()
+        {
+            isPerformingAction = _animator.GetBool(IsPerformingAction);
+            isPerformingQuickTurn = _animator.GetBool(IsPerformingQuickTurn);
+            isUsingRootMotion = _animator.GetBool(IsUsingRootMotion);
+            isJumping = _animator.GetBool(IsJumping);
         }
     }
 }
