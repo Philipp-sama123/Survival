@@ -267,7 +267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9033704128539062909, guid: ee95360d74f6a4a88a1809ff120e69b0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.990297
+      value: 15.132466
       objectReference: {fileID: 0}
     - target: {fileID: 9033704128539062909, guid: ee95360d74f6a4a88a1809ff120e69b0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -465,7 +465,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5519062793182988503, guid: a8aaf431cc8664081a50704e66697885, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.990297
+      value: 15.132466
       objectReference: {fileID: 0}
     - target: {fileID: 5519062793182988503, guid: a8aaf431cc8664081a50704e66697885, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1651,7 +1651,8 @@ MonoBehaviour:
   verticalCameraInput: 0
   sprintInput: 0
   jumpInput: 0
-  quickTurnInput: 0
+  quickTurnRightInput: 0
+  quickTurnLeftInput: 0
   dodgeInput: 0
 --- !u!54 &2476192707234208764
 Rigidbody:

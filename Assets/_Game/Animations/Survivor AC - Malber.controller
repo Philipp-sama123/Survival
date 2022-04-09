@@ -414,15 +414,15 @@ BlendTree:
   m_Name: Running
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400012, guid: 13d2640367521314591db34597e3f5d6, type: 3}
+    m_Motion: {fileID: 7400000, guid: e1558bed9a2c9af47979010f5a6dd890, type: 2}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
-    m_CycleOffset: 0.5
+    m_CycleOffset: 0
     m_DirectBlendParameter: Vertical
-    m_Mirror: 1
+    m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400012, guid: 37c6cfe59f56e8a4799011397a870a8b, type: 3}
+    m_Motion: {fileID: 7400000, guid: c2d102df1448a634793a676834c67cef, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -430,7 +430,7 @@ BlendTree:
     m_DirectBlendParameter: Vertical
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400012, guid: 13d2640367521314591db34597e3f5d6, type: 3}
+    m_Motion: {fileID: 7400000, guid: 5bec60f4a22fa2b4f9105c566b900635, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -707,7 +707,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Survivor AC 2
+  m_Name: Survivor AC - Malber
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Vertical
@@ -1300,7 +1300,7 @@ BlendTree:
     m_DirectBlendParameter: Vertical
     m_Mirror: 1
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 39c56eccd7baaf44bbef1c7951357d77, type: 3}
+    m_Motion: {fileID: 1827226128182048838, guid: 67eeb5c7b660a3149b5f9a8455b68e3b, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1356,15 +1356,15 @@ BlendTree:
   m_Name: Walking Forward
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400004, guid: 13d2640367521314591db34597e3f5d6, type: 3}
+    m_Motion: {fileID: 7400000, guid: 5ad304181001d304b81bae6514c1fa45, type: 2}
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
-    m_CycleOffset: 0.5
+    m_CycleOffset: 0
     m_DirectBlendParameter: Vertical
-    m_Mirror: 1
+    m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400002, guid: 37c6cfe59f56e8a4799011397a870a8b, type: 3}
+    m_Motion: {fileID: 7400000, guid: a1715bed5acc22c4b9b872bf02ae21ff, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1372,7 +1372,7 @@ BlendTree:
     m_DirectBlendParameter: Vertical
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400004, guid: 13d2640367521314591db34597e3f5d6, type: 3}
+    m_Motion: {fileID: 7400000, guid: 31dd03bdfaf6af64a81002ad74322840, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
