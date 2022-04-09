@@ -73,9 +73,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""QuickTurn"",
+                    ""name"": ""QuickTurn Right"",
                     ""type"": ""Button"",
                     ""id"": ""b3f14c5e-c874-46c8-bdde-c7de65543b5f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QuickTurn Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""22495b18-5175-4e1e-846b-43273bdfcb64"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -218,8 +227,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b541aaf0-2eb6-48db-a373-25459765b075"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": ""MultiTap"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dodge"",
@@ -244,7 +253,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""QuickTurn"",
+                    ""action"": ""QuickTurn Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -255,7 +264,29 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": ""MultiTap"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""QuickTurn"",
+                    ""action"": ""QuickTurn Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""552b821a-6417-4d56-ad4a-ce427650dd30"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickTurn Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c882fe6-e380-4839-be40-f9e140fb6917"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickTurn Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -310,7 +341,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
         m_PlayerMovement_Sprint = m_PlayerMovement.FindAction("Sprint", throwIfNotFound: true);
         m_PlayerMovement_Dodge = m_PlayerMovement.FindAction("Dodge", throwIfNotFound: true);
-        m_PlayerMovement_QuickTurn = m_PlayerMovement.FindAction("QuickTurn", throwIfNotFound: true);
+        m_PlayerMovement_QuickTurnRight = m_PlayerMovement.FindAction("QuickTurn Right", throwIfNotFound: true);
+        m_PlayerMovement_QuickTurnLeft = m_PlayerMovement.FindAction("QuickTurn Left", throwIfNotFound: true);
         // Player Actions
         m_PlayerActions = asset.FindActionMap("Player Actions", throwIfNotFound: true);
         m_PlayerActions_Roll = m_PlayerActions.FindAction("Roll", throwIfNotFound: true);
@@ -378,7 +410,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerMovement_Jump;
     private readonly InputAction m_PlayerMovement_Sprint;
     private readonly InputAction m_PlayerMovement_Dodge;
-    private readonly InputAction m_PlayerMovement_QuickTurn;
+    private readonly InputAction m_PlayerMovement_QuickTurnRight;
+    private readonly InputAction m_PlayerMovement_QuickTurnLeft;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -388,7 +421,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerMovement_Jump;
         public InputAction @Sprint => m_Wrapper.m_PlayerMovement_Sprint;
         public InputAction @Dodge => m_Wrapper.m_PlayerMovement_Dodge;
-        public InputAction @QuickTurn => m_Wrapper.m_PlayerMovement_QuickTurn;
+        public InputAction @QuickTurnRight => m_Wrapper.m_PlayerMovement_QuickTurnRight;
+        public InputAction @QuickTurnLeft => m_Wrapper.m_PlayerMovement_QuickTurnLeft;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -413,9 +447,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Dodge.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDodge;
                 @Dodge.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDodge;
                 @Dodge.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDodge;
-                @QuickTurn.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurn;
-                @QuickTurn.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurn;
-                @QuickTurn.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurn;
+                @QuickTurnRight.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurnRight;
+                @QuickTurnRight.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurnRight;
+                @QuickTurnRight.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurnRight;
+                @QuickTurnLeft.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurnLeft;
+                @QuickTurnLeft.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurnLeft;
+                @QuickTurnLeft.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnQuickTurnLeft;
             }
             m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -435,9 +472,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Dodge.started += instance.OnDodge;
                 @Dodge.performed += instance.OnDodge;
                 @Dodge.canceled += instance.OnDodge;
-                @QuickTurn.started += instance.OnQuickTurn;
-                @QuickTurn.performed += instance.OnQuickTurn;
-                @QuickTurn.canceled += instance.OnQuickTurn;
+                @QuickTurnRight.started += instance.OnQuickTurnRight;
+                @QuickTurnRight.performed += instance.OnQuickTurnRight;
+                @QuickTurnRight.canceled += instance.OnQuickTurnRight;
+                @QuickTurnLeft.started += instance.OnQuickTurnLeft;
+                @QuickTurnLeft.performed += instance.OnQuickTurnLeft;
+                @QuickTurnLeft.canceled += instance.OnQuickTurnLeft;
             }
         }
     }
@@ -482,7 +522,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
-        void OnQuickTurn(InputAction.CallbackContext context);
+        void OnQuickTurnRight(InputAction.CallbackContext context);
+        void OnQuickTurnLeft(InputAction.CallbackContext context);
     }
     public interface IPlayerActionsActions
     {

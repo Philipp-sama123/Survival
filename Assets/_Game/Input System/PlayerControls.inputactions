@@ -51,9 +51,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "QuickTurn",
+                    "name": "QuickTurn Right",
                     "type": "Button",
                     "id": "b3f14c5e-c874-46c8-bdde-c7de65543b5f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "QuickTurn Left",
+                    "type": "Button",
+                    "id": "22495b18-5175-4e1e-846b-43273bdfcb64",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -196,8 +205,8 @@
                 {
                     "name": "",
                     "id": "b541aaf0-2eb6-48db-a373-25459765b075",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
+                    "path": "<Keyboard>/f",
+                    "interactions": "MultiTap",
                     "processors": "",
                     "groups": "",
                     "action": "Dodge",
@@ -222,7 +231,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "QuickTurn",
+                    "action": "QuickTurn Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -233,7 +242,29 @@
                     "interactions": "MultiTap",
                     "processors": "",
                     "groups": "",
-                    "action": "QuickTurn",
+                    "action": "QuickTurn Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "552b821a-6417-4d56-ad4a-ce427650dd30",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickTurn Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9c882fe6-e380-4839-be40-f9e140fb6917",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickTurn Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

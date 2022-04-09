@@ -22,7 +22,8 @@ namespace _Game.Scripts
 
         [Header("Button Input")] public bool sprintInput;
         public bool jumpInput;
-        public bool quickTurnInput;
+        public bool quickTurnRightInput;
+        public bool quickTurnLeftInput;
         public bool dodgeInput;
         private static readonly int IsPerformingQuickTurn = Animator.StringToHash("IsPerformingQuickTurn");
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
@@ -47,7 +48,8 @@ namespace _Game.Scripts
                 _inputActions.PlayerMovement.Sprint.performed += i => sprintInput = true;
                 _inputActions.PlayerMovement.Sprint.canceled += i => sprintInput = false;
 
-                _inputActions.PlayerMovement.QuickTurn.performed += i => quickTurnInput = true;
+                _inputActions.PlayerMovement.QuickTurnRight.performed += i => quickTurnRightInput = true;
+                _inputActions.PlayerMovement.QuickTurnLeft.performed += i => quickTurnLeftInput = true;
                 _inputActions.PlayerMovement.Jump.performed += i => jumpInput = true;
                 _inputActions.PlayerMovement.Dodge.performed += i => dodgeInput = true;
             }
@@ -106,17 +108,19 @@ namespace _Game.Scripts
         private void HandleQuickTurnInput()
         {
             if (_playerManager.isPerformingAction) return;
-            if (!quickTurnInput) return;
+            if (!quickTurnRightInput && !quickTurnLeftInput) return;
+            
+            // todo : make this depending on the player Position 
+            _animatorManager.PlayAnimationWithRootMotion(
+                quickTurnRightInput
+                    ? "Quick Turn Right"
+                    : "Quick Turn Left",
+                true);
 
-            quickTurnInput = false;
+            quickTurnRightInput = false;
+            quickTurnLeftInput = false;
 
             _animator.SetBool(IsPerformingQuickTurn, true);
-
-            _animatorManager.PlayAnimationWithoutRootMotion(
-                horizontalCameraInput < 0.25f
-                    ? "Quick Turn Left"
-                    : "Quick Turn Right",
-                true);
         }
 
         private void HandleDodgeInput()
@@ -126,7 +130,7 @@ namespace _Game.Scripts
 
             dodgeInput = false;
 
-            _animatorManager.PlayAnimationWithoutRootMotion(
+            _animatorManager.PlayAnimationWithRootMotion(
                 verticalMovementInput < 0
                     ? "Dodge Backward"
                     : "Dodge Forward",

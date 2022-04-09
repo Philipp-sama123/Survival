@@ -18,7 +18,7 @@ namespace _Game.Scripts
         private float rotationSpeed = 7.5f;
 
         [SerializeField] private float runningSpeed = 5f;
-        [SerializeField] private float sprintingSpeed = 7f;
+        [SerializeField] private float sprintingSpeed = 15f;
         [SerializeField] private float crouchingSpeedReducer = 5f;
         [SerializeField] private float walkingSpeed = 1.5f;
 
@@ -62,31 +62,30 @@ namespace _Game.Scripts
 
             _moveDirection.Normalize();
             _moveDirection.y = 0; // prevent going up
+            if (_isGrounded)
+            {
+                if (_inputManager.verticalMovementInput > 0.5f)
+                {
+                    _moveDirection *= runningSpeed;
+                }
+                else
+                {
+                    _moveDirection *= walkingSpeed;
+                }
 
+                if (_isSprinting)
+                {
+                    _moveDirection *= sprintingSpeed;
+                }
 
-            // if (_isSprinting)
-            // {
-            //     _moveDirection *= sprintingSpeed;
-            // }
-            // else
-            // {
-            //     if (_inputManager.verticalMovementInput >= 0.5f)
-            //     {
-            //         _moveDirection *= runningSpeed;
-            //     }
-            //     else
-            //     {
-            //         _moveDirection *= walkingSpeed;
-            //     }
-            // }
-            //
-            // if (_isCrouching)
-            // {
-            //     _moveDirection /= crouchingSpeedReducer;
-            // }
-            //
-            // Vector3 movementVelocity = _moveDirection;
-            // playerRigidbody.velocity = movementVelocity;
+                if (_isCrouching)
+                {
+                    _moveDirection /= crouchingSpeedReducer;
+                }
+            }
+
+            Vector3 movementVelocity = _moveDirection;
+            playerRigidbody.velocity = movementVelocity;
         }
 
         public void HandleJumping()
@@ -158,7 +157,6 @@ namespace _Game.Scripts
                 _inAirTimer += Time.deltaTime;
                 playerRigidbody.AddForce(transform.forward * leapingVelocity);
                 playerRigidbody.AddForce(-Vector3.up * fallingVelocity * _inAirTimer, ForceMode.Acceleration);
-                Debug.LogWarning(-Vector3.up * _inAirTimer * fallingVelocity);
                 //  -Vector3.up     --      means it pulls you downwards 
                 //  * inAirTimer    --      the longer you are in the air the quicker you fall
             }

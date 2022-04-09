@@ -92,7 +92,7 @@ namespace _Game.Scripts
             animator.SetFloat(Horizontal, _snappedHorizontal, 0.1f, Time.deltaTime);
             animator.SetFloat(Vertical, _snappedVertical, 0.1f, Time.deltaTime);
         }
-        
+
         public void PlayAnimationWithoutRootMotion(string targetAnimation, bool isPerformingAction)
         {
             animator.SetBool(IsPerformingAction, isPerformingAction);
@@ -101,10 +101,18 @@ namespace _Game.Scripts
             animator.CrossFade(targetAnimation, 0.2f);
         }
 
+        public void PlayAnimationWithRootMotion(string targetAnimation, bool isPerformingAction,
+            bool isUsingRootMotion = true)
+        {
+            animator.SetBool(IsPerformingAction, isPerformingAction);
+            animator.applyRootMotion = true;
+            animator.SetBool(IsUsingRootMotion, isUsingRootMotion);
+            animator.CrossFade(targetAnimation, 0.2f);
+        }
+
         private void OnAnimatorMove()
         {
-            
-          // if (!_playerManager.isUsingRootMotion) return;
+            if (!_playerManager.isUsingRootMotion) return;
             Vector3 animatorDeltaPosition = animator.deltaPosition;
             animatorDeltaPosition.y = 0; // prevents going up
 

@@ -35,6 +35,7 @@ namespace _Game.Scripts
 
         private void FixedUpdate()
         {
+            if (isUsingRootMotion) return; // this is very important (!) 
             _playerLocomotionManager.HandleAllMovements();
         }
 
