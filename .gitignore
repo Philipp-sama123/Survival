@@ -13,8 +13,10 @@
 # Ignore Assets
 /[Aa]ssets/[Aa]mplifyAnimationPack
 /[Aa]ssets/[Pp]olyart
-/[Aa]ssets/[Tt]extMesh Pro
-/[Aa]ssets/[Ss]urvivor_Girl_1
+/[Aa]ssets/[Ff]antasyAdventureEnvironment/_DemoScenes
+/[Aa]ssets/[Ff]antasyAdventureEnvironment/Prefabs
+/[Aa]ssets/[Ss]urvivor_Girl_1/Prefab
+/[Aa]ssets/[Ss]urvivor_Girl_1/Map_Survivor_Girl_1
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
